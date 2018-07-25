@@ -9,13 +9,13 @@ import java.util.stream.Stream;
 
 import org.junit.Test;
 
-import solutions.basics.immutable.ImmutablePerson;
+import solutions.basics.immutable.ImmutableUser;
 
 public class PurePureFunctionsTest {
 
     @Test
     public void testPureFunction() {
-        List<ImmutablePerson> allPeople = Stream.of(getTheFlintstones(), getTheRubbles())
+        List<ImmutableUser> allPeople = Stream.of(getTheFlintstones(), getTheRubbles())
                 .flatMap(Function.identity())
                 .collect(Collectors.toList());
         
@@ -24,13 +24,13 @@ public class PurePureFunctionsTest {
         assertThat(allPeople.get(3).getFirstName()).isEqualTo("Betty");
     }
     
-    private Stream<ImmutablePerson> getTheFlintstones() {
-        return Stream.of(ImmutablePerson.of("Fred", "Flintstone"),
-                ImmutablePerson.of("Wilma", "Flintstone"));
+    private Stream<ImmutableUser> getTheFlintstones() {
+        return Stream.of(ImmutableUser.of("Fred", "Flintstone"),
+                ImmutableUser.of("Wilma", "Flintstone"));
     }
 
-    private Stream<ImmutablePerson> getTheRubbles() {
-        return Stream.of(ImmutablePerson.of("Barney", "Rubble"),
-                ImmutablePerson.of("Betty", "Rubble"));
+    private Stream<ImmutableUser> getTheRubbles() {
+        return Stream.of(ImmutableUser.of("Barney", "Rubble"),
+                ImmutableUser.of("Betty", "Rubble"));
     }
 }

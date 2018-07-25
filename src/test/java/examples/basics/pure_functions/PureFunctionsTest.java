@@ -7,13 +7,13 @@ import java.util.List;
 
 import org.junit.Test;
 
-import solutions.basics.immutable.ImmutablePerson;
+import solutions.basics.immutable.ImmutableUser;
 
 public class PureFunctionsTest {
 
     @Test
     public void testPureFunction() {
-        List<ImmutablePerson> allPeople = new ArrayList<>();
+        List<ImmutableUser> allPeople = new ArrayList<>();
         allPeople.addAll(getTheFlintstones());
         allPeople.addAll(getTheRubbles());
         
@@ -22,20 +22,20 @@ public class PureFunctionsTest {
         assertThat(allPeople.get(3).getFirstName()).isEqualTo("Betty");
     }
     
-    private List<ImmutablePerson> getTheFlintstones() {
-        List<ImmutablePerson> flintstones = new ArrayList<>();
+    private List<ImmutableUser> getTheFlintstones() {
+        List<ImmutableUser> flintstones = new ArrayList<>();
         
-        flintstones.add(ImmutablePerson.of("Fred", "Flintstone"));
-        flintstones.add(ImmutablePerson.of("Wilma", "Flintstone"));
+        flintstones.add(ImmutableUser.of("Fred", "Flintstone"));
+        flintstones.add(ImmutableUser.of("Wilma", "Flintstone"));
 
         return flintstones;
     }
 
-    private List<ImmutablePerson> getTheRubbles() {
-        List<ImmutablePerson> rubbles = new ArrayList<>();
+    private List<ImmutableUser> getTheRubbles() {
+        List<ImmutableUser> rubbles = new ArrayList<>();
         
-        rubbles.add(ImmutablePerson.of("Barney", "Rubble"));
-        rubbles.add(ImmutablePerson.of("Betty", "Rubble"));
+        rubbles.add(ImmutableUser.of("Barney", "Rubble"));
+        rubbles.add(ImmutableUser.of("Betty", "Rubble"));
 
         return rubbles;
     }

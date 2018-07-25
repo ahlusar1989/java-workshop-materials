@@ -28,11 +28,11 @@ public class ScriptGeneratorTest {
     
     @Test
     public void testAwfulScriptGenerator() throws IOException {
-        testGenerator(new AwfulScriptGenerator());
+        testGenerator(new ImperativeScriptGenerator());
     }
 
     @Test
     public void testAwfulScriptGeneratorRefactoredStep() throws IOException {
-        testGenerator(new AwfulScriptGeneratorRefactored());
+        testGenerator(new ImperativeScriptGeneratorRefactored());
     }
 }

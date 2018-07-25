@@ -1,20 +1,16 @@
-package solutions.refactoring;
+package exercises.refactoring;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 
 /**
- * Pure functions:
- * 
- * 1. addXXX methods changed to getXXX
- * 2. we no longer pass a List around
+ * Traditional refactoring with extracted methods and utility methods 
  */
-public class AwfulScriptGeneratorRefactoredStep2 implements ScriptGenerator {
+public class ImperativeScriptGeneratorRefactored implements ScriptGenerator {
     private static String getInsertStatement(String userId, int appId) {
         return "insert into ApplicationPermission(user_id, application_id) values('"
                 + userId
@@ -27,56 +23,49 @@ public class AwfulScriptGeneratorRefactoredStep2 implements ScriptGenerator {
     public List<String> generate(Sheet sheet) {
         List<String> lines = new ArrayList<>();
         for (Row row : sheet) {
-            lines.addAll(getInsertStatementsForRow(row));
+            addInsertStatementsForRow(lines, row);
         }
 
         return lines;
     }
 
-    private List<String> getInsertStatementsForRow(Row row) {
-        List<String> lines = new ArrayList<>();
+    private void addInsertStatementsForRow(List<String> lines, Row row) {
         Cell firstCell = row.getCell(0);
         if (firstCell != null) {
             String userId = firstCell.getStringCellValue();
             if (isValidUserId(userId)) {
-                lines.addAll(getInsertStatementsForRow(row, userId));
+                addInsertStatementsForRow(lines, row, userId);
             }
         }
-        return lines;
     }
 
-    private List<String> getInsertStatementsForRow(Row row, String userId) {
-        List<String> lines = new ArrayList<>();
+    private void addInsertStatementsForRow(List<String> lines, Row row, String userId) {
         for (Cell cell : row) {
             if (cell.getColumnIndex() == 0) {
                 continue;
             }
 
             if (hasAuthority(cell)) {
-                getInsertStatementForCell(userId, cell).ifPresent(st -> lines.add(st));
+                addInsertStatementForCell(lines, userId, cell);
             }
         }
-        return lines;
     }
 
-    private Optional<String> getInsertStatementForCell(String userId, Cell cell) {
-        String answer = null;
+    private void addInsertStatementForCell(List<String> lines, String userId, Cell cell) {
         switch (cell.getColumnIndex()) {
         case 1:
-            answer = getInsertStatement(userId, 2237);
+            lines.add(getInsertStatement(userId, 2237));
             break;
         case 2:
-            answer = getInsertStatement(userId, 4352);
+            lines.add(getInsertStatement(userId, 4352));
             break;
         case 3:
-            answer = getInsertStatement(userId, 3657);
+            lines.add(getInsertStatement(userId, 3657));
             break;
         case 4:
-            answer = getInsertStatement(userId, 5565);
+            lines.add(getInsertStatement(userId, 5565));
             break;
         }
-        
-        return Optional.ofNullable(answer);
     }
     
     private boolean hasAuthority(Cell cell) {

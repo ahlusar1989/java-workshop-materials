@@ -36,7 +36,7 @@ public abstract class AbstractAnimal {
             return this;
         }
         
-// won't compile!
+// Will this compile?
 //        public AbstractAnimal build() {
 //            return new AbstractAnimal(this);
 //        }

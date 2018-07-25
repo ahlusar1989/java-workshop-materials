@@ -7,13 +7,13 @@ import java.util.List;
 
 import org.junit.Test;
 
-import solutions.basics.immutable.ImmutablePerson;
+import solutions.basics.immutable.ImmutableUser;
 
 public class ImpureFunctionsTest {
 
     @Test
     public void testImpureFunction() {
-        List<ImmutablePerson> allPeople = new ArrayList<>();
+        List<ImmutableUser> allPeople = new ArrayList<>();
         addTheFlintstones(allPeople);
         addTheRubbles(allPeople);
         
@@ -22,13 +22,13 @@ public class ImpureFunctionsTest {
         assertThat(allPeople.get(3).getFirstName()).isEqualTo("Betty");
     }
     
-    private void addTheFlintstones(List<ImmutablePerson> people) {
-        people.add(ImmutablePerson.of("Fred", "Flintstone"));
-        people.add(ImmutablePerson.of("Wilma", "Flintstone"));
+    private void addTheFlintstones(List<ImmutableUser> people) {
+        people.add(ImmutableUser.of("Fred", "Flintstone"));
+        people.add(ImmutableUser.of("Wilma", "Flintstone"));
     }
 
-    private void addTheRubbles(List<ImmutablePerson> people) {
-        people.add(ImmutablePerson.of("Barney", "Rubble"));
-        people.add(ImmutablePerson.of("Betty", "Rubble"));
+    private void addTheRubbles(List<ImmutableUser> people) {
+        people.add(ImmutableUser.of("Barney", "Rubble"));
+        people.add(ImmutableUser.of("Betty", "Rubble"));
     }
 }

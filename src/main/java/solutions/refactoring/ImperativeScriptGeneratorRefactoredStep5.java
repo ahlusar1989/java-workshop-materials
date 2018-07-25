@@ -14,7 +14,7 @@ import utilities.Utils;
 /**
  * Refinement - use Optional instead of null checking
  */
-public class AwfulScriptGeneratorRefactoredStep5 implements ScriptGenerator {
+public class ImperativeScriptGeneratorRefactoredStep5 implements ScriptGenerator {
     private static String getInsertStatement(String userId, int appId) {
         return "insert into ApplicationPermission(user_id, application_id) values('"
                 + userId

@@ -12,9 +12,9 @@ import org.apache.poi.ss.usermodel.Sheet;
 import utilities.Utils;
 
 /**
- * Refinement - get rid of the compound if statement
+ * Streams
  */
-public class AwfulScriptGeneratorRefactoredStep4 implements ScriptGenerator {
+public class ImperativeScriptGeneratorRefactoredStep3 implements ScriptGenerator {
     private static String getInsertStatement(String userId, int appId) {
         return "insert into ApplicationPermission(user_id, application_id) values('"
                 + userId
@@ -26,23 +26,28 @@ public class AwfulScriptGeneratorRefactoredStep4 implements ScriptGenerator {
     @Override
     public List<String> generate(Sheet sheet) {
         return Utils.stream(sheet)
-                .filter(this::hasValidUserId)
                 .flatMap(this::getInsertStatementsForRow)
                 .collect(Collectors.toList());
     }
 
     private Stream<String> getInsertStatementsForRow(Row row) {
         Cell firstCell = row.getCell(0);
-        return getInsertStatementsForRow(row, firstCell.getStringCellValue());
+        if (firstCell != null) {
+            String userId = firstCell.getStringCellValue();
+            if (isValidUserId(userId)) {
+                return getInsertStatementsForRow(row, userId);
+            }
+        }
+        return Stream.empty();
     }
 
     private Stream<String> getInsertStatementsForRow(Row row, String userId) {
         return Utils.stream(row)
                 .skip(1)
-                .filter(this::hasAuthority)
-                .map(c -> getInsertStatementForCell(userId, c))
-                .filter(Optional::isPresent)
-                .map(Optional::get);
+                .filter(this::hasAuthority)  // Stream<String>
+                .map(c -> getInsertStatementForCell(userId, c)) // Stream<Optional<String>>
+                .filter(Optional::isPresent)  // filter out empties, still Stream<Optional<String>>
+                .map(Optional::get);  // Stream<String>
     }
 
     private Optional<String> getInsertStatementForCell(String userId, Cell cell) {
@@ -63,11 +68,6 @@ public class AwfulScriptGeneratorRefactoredStep4 implements ScriptGenerator {
         }
         
         return Optional.ofNullable(answer);
-    }
-    
-    private boolean hasValidUserId(Row row) {
-        Cell cell = row.getCell(0);
-        return cell != null && isValidUserId(cell.getStringCellValue());
     }
     
     private boolean hasAuthority(Cell cell) {

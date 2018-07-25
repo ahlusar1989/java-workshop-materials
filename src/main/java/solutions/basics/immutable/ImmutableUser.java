@@ -7,13 +7,13 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-public class ImmutablePerson {
+public class ImmutableUser {
     private String firstName;
     private String middleName;
     private String lastName;
     private List<String> nickNames;
     
-    private ImmutablePerson(Builder builder) {
+    private ImmutableUser(Builder builder) {
         firstName = Objects.requireNonNull(builder.firstName);
         middleName = builder.middleName;
         lastName = Objects.requireNonNull(builder.lastName);
@@ -21,7 +21,7 @@ public class ImmutablePerson {
     }
     
     // copy constructor - for the with*** methods
-    private ImmutablePerson(ImmutablePerson other) {
+    private ImmutableUser(ImmutableUser other) {
         firstName = other.firstName;
         middleName = other.middleName;
         lastName = other.lastName;
@@ -44,25 +44,25 @@ public class ImmutablePerson {
         return nickNames.stream();
     }
     
-    public ImmutablePerson withMiddleName(String middleName) {
-        ImmutablePerson copy = new ImmutablePerson(this);
+    public ImmutableUser withMiddleName(String middleName) {
+        ImmutableUser copy = new ImmutableUser(this);
         copy.middleName = middleName;
         return copy;
     }
 
-    public ImmutablePerson withNickName(String nickName) {
-        ImmutablePerson copy = new ImmutablePerson(this);
+    public ImmutableUser withNickName(String nickName) {
+        ImmutableUser copy = new ImmutableUser(this);
         copy.nickNames.add(nickName);
         return copy;
     }
     
-    public ImmutablePerson withNickNames(String...nickNames) {
-        ImmutablePerson copy = new ImmutablePerson(this);
+    public ImmutableUser withNickNames(String...nickNames) {
+        ImmutableUser copy = new ImmutableUser(this);
         copy.nickNames.addAll(Arrays.asList(nickNames));
         return copy;
     }
     
-    public static ImmutablePerson of(String firstName, String lastName) {
+    public static ImmutableUser of(String firstName, String lastName) {
         return new Builder()
                 .withFirstName(firstName)
                 .withLastName(lastName)
@@ -100,8 +100,8 @@ public class ImmutablePerson {
             return this;
         }
         
-        public ImmutablePerson build() {
-            return new ImmutablePerson(this);
+        public ImmutableUser build() {
+            return new ImmutableUser(this);
         }
     }
 }

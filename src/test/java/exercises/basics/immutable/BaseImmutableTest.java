@@ -7,13 +7,13 @@ import java.util.stream.Collectors;
 
 import org.junit.Test;
 
-public class BasicImmutableTest {
+public class BaseImmutableTest {
 
 //   @Test
 //   public void testMissingFirstAndLastName() {
 //       // should throw a NPE because required parameters are missing
 //       assertThatExceptionOfType(NullPointerException.class).isThrownBy(() ->{
-//           ImmutablePerson person = new ImmutablePerson.Builder()
+//           ImmutableUser person = new ImmutableUser.Builder()
 //                   .build();
 //           assertThat(person.getFirstName()).isNull();
 //       });
@@ -23,7 +23,7 @@ public class BasicImmutableTest {
 //   public void testMissingFirstName() {
 //       // should throw a NPE because required parameters are missing
 //       assertThatExceptionOfType(NullPointerException.class).isThrownBy(() ->{
-//           ImmutablePerson person = new ImmutablePerson.Builder()
+//           ImmutableUser person = new ImmutableUser.Builder()
 //                   .withLastName("Flintstone")
 //                   .build();
 //           assertThat(person.getFirstName()).isNull();
@@ -34,7 +34,7 @@ public class BasicImmutableTest {
 //   public void testMissingLastName() {
 //       // should throw a NPE because required parameters are missing
 //       assertThatExceptionOfType(NullPointerException.class).isThrownBy(() ->{
-//           ImmutablePerson person = new ImmutablePerson.Builder()
+//           ImmutableUser person = new ImmutableUser.Builder()
 //                   .withFirstName("Fred")
 //                   .build();
 //           assertThat(person.getLastName()).isNull();
@@ -43,7 +43,7 @@ public class BasicImmutableTest {
 //
 //   @Test
 //   public void testMinimalPerson() {
-//       ImmutablePerson person = new ImmutablePerson.Builder()
+//       ImmutableUser person = new ImmutableUser.Builder()
 //               .withFirstName("Fred")
 //               .withLastName("Flintstone")
 //               .build();
@@ -55,7 +55,7 @@ public class BasicImmutableTest {
 //
 //   @Test
 //   public void testMiddleNameInBuilder() {
-//       ImmutablePerson person = new ImmutablePerson.Builder()
+//       ImmutableUser person = new ImmutableUser.Builder()
 //               .withFirstName("Fred")
 //               .withMiddleName("Farnsworth")
 //               .withLastName("Flintstone")
@@ -68,7 +68,7 @@ public class BasicImmutableTest {
 //
 //   @Test
 //   public void testMiddleNameWithMethod() {
-//       ImmutablePerson person = new ImmutablePerson.Builder()
+//       ImmutableUser person = new ImmutableUser.Builder()
 //               .withFirstName("Fred")
 //               .withLastName("Flintstone")
 //               .build();
@@ -81,7 +81,7 @@ public class BasicImmutableTest {
 //
 //   @Test
 //   public void testMiddleNameInBuilderAndWithMethod() {
-//       ImmutablePerson person = new ImmutablePerson.Builder()
+//       ImmutableUser person = new ImmutableUser.Builder()
 //               .withFirstName("Fred")
 //               .withMiddleName("Farnsworth")
 //               .withLastName("Flintstone")
@@ -95,7 +95,7 @@ public class BasicImmutableTest {
 //
 //   @Test
 //   public void testNickNameInBuilder() {
-//       ImmutablePerson person = new ImmutablePerson.Builder()
+//       ImmutableUser person = new ImmutableUser.Builder()
 //               .withFirstName("Fred")
 //               .withMiddleName("Farnsworth")
 //               .withLastName("Flintstone")
@@ -109,7 +109,7 @@ public class BasicImmutableTest {
 //
 //   @Test
 //   public void testNickNameWithMethod() {
-//       ImmutablePerson person = new ImmutablePerson.Builder()
+//       ImmutableUser person = new ImmutableUser.Builder()
 //               .withFirstName("Fred")
 //               .withMiddleName("Farnsworth")
 //               .withLastName("Flintstone")

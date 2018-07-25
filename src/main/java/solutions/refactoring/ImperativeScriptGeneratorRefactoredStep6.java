@@ -18,7 +18,7 @@ import utilities.Utils;
 /**
  * Refinement - function composition
  */
-public class AwfulScriptGeneratorRefactoredStep6 implements ScriptGenerator {
+public class ImperativeScriptGeneratorRefactoredStep6 implements ScriptGenerator {
 
     private static BiFunction<String, Integer, Optional<String>> insertBuilder = (userId, appId) -> 
         Optional.of("insert into ApplicationPermission(user_id, application_id) values('"

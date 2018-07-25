@@ -1,4 +1,4 @@
-package solutions.refactoring;
+package exercises.refactoring;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,7 +7,7 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 
-public class AwfulScriptGenerator implements ScriptGenerator {
+public class ImperativeScriptGenerator implements ScriptGenerator {
     private static String getInsertStatement(String userId, int appId) {
         return "insert into ApplicationPermission(user_id, application_id) values('"
                 + userId

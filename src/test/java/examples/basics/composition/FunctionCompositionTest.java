@@ -9,7 +9,7 @@ import java.util.stream.Stream;
 
 import org.junit.Test;
 
-import solutions.basics.immutable.ImmutablePerson;
+import solutions.basics.immutable.ImmutableUser;
 
 public class FunctionCompositionTest {
 
@@ -36,9 +36,9 @@ public class FunctionCompositionTest {
     
     @Test
     public void testHelloInStream() {
-        String answer = Stream.of(ImmutablePerson.of("Fred", "Flintstone"),
-                                  ImmutablePerson.of("Barney", "Rubble"))
-                .map(ImmutablePerson::getFirstName)
+        String answer = Stream.of(ImmutableUser.of("Fred", "Flintstone"),
+                                  ImmutableUser.of("Barney", "Rubble"))
+                .map(ImmutableUser::getFirstName)
                 .map(hello)
                 .collect(Collectors.joining(", "));
 

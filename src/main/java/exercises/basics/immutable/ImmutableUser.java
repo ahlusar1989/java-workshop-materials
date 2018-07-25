@@ -1,4 +1,4 @@
 package exercises.basics.immutable;
 
-public class ImmutablePerson {
+public class ImmutableUser {
 }

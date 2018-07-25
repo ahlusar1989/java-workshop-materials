@@ -28,36 +28,36 @@ public class ScriptGeneratorTest {
     
     @Test
     public void testAwfulScriptGenerator() throws IOException {
-        testGenerator(new AwfulScriptGenerator());
+        testGenerator(new ImperativeScriptGenerator());
     }
 
     @Test
     public void testAwfulScriptGeneratorRefactoredStep1() throws IOException {
-        testGenerator(new AwfulScriptGeneratorRefactoredStep1());
+        testGenerator(new ImperativeScriptGeneratorRefactoredStep1());
     }
 
     @Test
     public void testAwfulScriptGeneratorRefactoredStep2() throws IOException {
-        testGenerator(new AwfulScriptGeneratorRefactoredStep2());
+        testGenerator(new ImperativeScriptGeneratorRefactoredStep2());
     }
 
     @Test
     public void testAwfulScriptGeneratorRefactoredStep3() throws IOException {
-        testGenerator(new AwfulScriptGeneratorRefactoredStep3());
+        testGenerator(new ImperativeScriptGeneratorRefactoredStep3());
     }
 
     @Test
     public void testAwfulScriptGeneratorRefactoredStep4() throws IOException {
-        testGenerator(new AwfulScriptGeneratorRefactoredStep4());
+        testGenerator(new ImperativeScriptGeneratorRefactoredStep4());
     }
 
     @Test
     public void testAwfulScriptGeneratorRefactoredStep5() throws IOException {
-        testGenerator(new AwfulScriptGeneratorRefactoredStep5());
+        testGenerator(new ImperativeScriptGeneratorRefactoredStep5());
     }
 
     @Test
     public void testAwfulScriptGeneratorRefactoredStep6() throws IOException {
-        testGenerator(new AwfulScriptGeneratorRefactoredStep6());
+        testGenerator(new ImperativeScriptGeneratorRefactoredStep6());
     }
 }
