@@ -1,0 +1,255 @@
+<html>
+<head>
+<title>Functional Java Workshop</title>
+<link rel="stylesheet" href="reveal.js-3.6.0/css/reveal.css">
+<link rel="stylesheet" href="reveal.js-3.6.0/css/theme/moon.css">
+<link rel="stylesheet" href="reveal.js-3.6.0/lib/css/obsidian.css">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+      <section>
+        <h2>Functional Java Workshop</h2>
+        <h3>Lambda Syntax</h3>
+        <h4>Saran Ahluwalia</h4>
+        <p>https://github.com/ahlusar1989/java-workshop-materials</p>
+        <p>https://ahlusar1989.github.io/java-workshop-materials/</p>
+      </section>
+
+      <section>
+        <h1>Lambdas</h1>
+        <h4>Lambda == Anonymous Class</h4>
+        <p>All code examples in <code>examples.basics.lambdas.LambdaTest.java</code></p>
+      </section>
+      
+      <section>
+        Test Objects
+        <pre>
+          <code class="java">
+    private List&lt;SimpleImmutableObjectWithBuilder&gt; getTestObjects() {
+        List&lt;SimpleImmutableObjectWithBuilder&gt; answer = new ArrayList&lt;&gt;();
+        
+        answer.add(SimpleImmutableObjectWithBuilder.of(33, "Oak Tree"));
+        answer.add(SimpleImmutableObjectWithBuilder.of(22, "Elm Tree"));
+        answer.add(SimpleImmutableObjectWithBuilder.of(11, "Ash Tree"));
+        
+        return answer;
+    }
+          </code>
+        </pre>
+      </section>
+      
+      <section>
+        <p>Persistent Comparator (All Java Versions)</p>
+        <pre>
+          <code class="java" style="max-height: 550px">
+    public void testPersistentComparator() {
+        List&lt;SimpleImmutableObjectWithBuilder&gt; testObjects = getTestObjects();
+        
+        testObjects.sort(new TestComparator());
+        
+        assertThat(testObjects.get(0).getDescription()).isEqualTo("Ash Tree");
+        assertThat(testObjects.get(1).getDescription()).isEqualTo("Elm Tree");
+        assertThat(testObjects.get(2).getDescription()).isEqualTo("Oak Tree");
+    }
+    
+    private static class TestComparator implements
+            Comparator&lt;SimpleImmutableObjectWithBuilder&gt; {
+        @Override
+        public int compare(SimpleImmutableObjectWithBuilder o1,
+                SimpleImmutableObjectWithBuilder o2) {
+            return o1.getId().compareTo(o2.getId());
+        }
+    }
+          </code>
+        </pre>
+      </section>
+
+      <section>
+        <p>Anonymous Class (All Java Versions)</p>
+        <pre>
+          <code class="java" style="max-height: 500px">
+    public void testAnonymousClass() {
+        List&lt;SimpleImmutableObjectWithBuilder&gt; testObjects = getTestObjects();
+        
+        testObjects.sort(new Comparator&lt;SimpleImmutableObjectWithBuilder&gt;() {
+            @Override
+            public int compare(SimpleImmutableObjectWithBuilder o1,
+                    SimpleImmutableObjectWithBuilder o2) {
+                return o1.getId().compareTo(o2.getId());
+            }
+        });
+        
+        assertThat(testObjects.get(0).getDescription()).isEqualTo("Ash Tree");
+        assertThat(testObjects.get(1).getDescription()).isEqualTo("Elm Tree");
+        assertThat(testObjects.get(2).getDescription()).isEqualTo("Oak Tree");
+    }
+          </code>
+        </pre>
+      </section>
+
+      <section>
+        <p>Lambda Syntax 1 - Concise (Java 8+)</p>
+        <pre>
+          <code class="java">
+    public void testConciseLambdaSyntax() {
+        List&lt;SimpleImmutableObjectWithBuilder&gt; testObjects = getTestObjects();
+        
+        testObjects.sort((o1, o2) -> o1.getId().compareTo(o2.getId()));
+        
+        assertThat(testObjects.get(0).getDescription()).isEqualTo("Ash Tree");
+        assertThat(testObjects.get(1).getDescription()).isEqualTo("Elm Tree");
+        assertThat(testObjects.get(2).getDescription()).isEqualTo("Oak Tree");
+    }
+          </code>
+        </pre>
+      </section>
+      
+      <section>
+        <p>Lambda Syntax 2 - Verbose (Java 8+)</p>
+        <pre>
+          <code class="java">
+    public void testVerboseLambdaSyntax() {
+        List&lt;SimpleImmutableObjectWithBuilder&gt; testObjects = getTestObjects();
+        
+        testObjects.sort((o1, o2) -> {
+            return o1.getId().compareTo(o2.getId());
+        });
+        
+        assertThat(testObjects.get(0).getDescription()).isEqualTo("Ash Tree");
+        assertThat(testObjects.get(1).getDescription()).isEqualTo("Elm Tree");
+        assertThat(testObjects.get(2).getDescription()).isEqualTo("Oak Tree");
+    }
+          </code>
+        </pre>
+      </section>
+
+      <section>
+        <p>Lambda Syntax 3 - Very Verbose (Java 8+)</p>
+        <pre>
+          <code class="java">
+    public void testVeryVerboseLambdaSyntax() {
+        List&lt;SimpleImmutableObjectWithBuilder&gt; testObjects = getTestObjects();
+        
+        testObjects.sort((SimpleImmutableObjectWithBuilder o1,
+                SimpleImmutableObjectWithBuilder o2) -> {
+            return o1.getId().compareTo(o2.getId());
+        });
+        
+        assertThat(testObjects.get(0).getDescription()).isEqualTo("Ash Tree");
+        assertThat(testObjects.get(1).getDescription()).isEqualTo("Elm Tree");
+        assertThat(testObjects.get(2).getDescription()).isEqualTo("Oak Tree");
+    }
+          </code>
+        </pre>
+      </section>
+      
+      <section>
+        <p>Method Reference (Java 8+)</p>
+        <pre>
+          <code class="java" style="max-height: 500px">
+    public void testMethodReference() {
+        List&lt;SimpleImmutableObjectWithBuilder&gt; testObjects = getTestObjects();
+        
+        testObjects.sort(this::compare);
+        
+        assertThat(testObjects.get(0).getDescription()).isEqualTo("Ash Tree");
+        assertThat(testObjects.get(1).getDescription()).isEqualTo("Elm Tree");
+        assertThat(testObjects.get(2).getDescription()).isEqualTo("Oak Tree");
+    }
+    
+    private int compare(SimpleImmutableObjectWithBuilder o1,
+            SimpleImmutableObjectWithBuilder o2) {
+        return o1.getId().compareTo(o2.getId());
+    }
+          </code>
+        </pre>
+      </section>
+
+      <section>
+        <h4>Method references can reference:</h4>
+        <ul>
+          <li>Static methods (String::valueOf)</li>
+          <li>Instance methods (this::someMethod in some cases)</li>
+          <li>Instance methods (SomeObject::someMethod in some cases)</li>
+          <li>Constructors (SomeObject::new)</li>
+        </ul>
+      </section>
+      
+      <section>
+        <h4>How Does this Work?</h4>
+        <ul>
+          <li>Functional Interfaces</li>
+          <li>Type Inference</li>
+        </ul>
+      </section>
+      
+      <section>
+        <h4>Functional Interfaces</h4>
+        <ul>
+          <li>Interface with one, and only one, <i>abstract</i> method
+            (not including equals, toString, etc. from Object)</li>
+          <li>May or may not be annotated with @FunctionalInterface</li>
+          <li>May have other static and default methods - no restriction</li>
+        </ul>
+        <p align="left">With a functional interface, the compiler can infer parameter and output types.</p>
+      </section>
+      
+      <section>
+        Comparator is a Functional Interface
+        <pre>
+          <code class="java" style="max-height: 500px">
+@FunctionalInterface
+public interface Comparator&lt;T&gt; {
+    int compare(T o1, T o2);
+
+    // many many default and static methods
+}
+
+// List's sort method takes a Comparator.  The compiler can infer everything it needs
+public interface List&lt;E&gt; extends Collection&lt;E&gt; {
+
+    default void sort(Comparator&lt;? super E&gt; c) {
+       ...   
+    }
+}
+          </code>
+        </pre>
+      </section>
+      
+      <section>
+      <h4>Summary</h4>
+        <ul>
+          <li>All of these options do the same thing!</li>
+          <li>My preference is method reference if possible</li>
+          <li>Second best is the concise lambda syntax</li>
+          <li>Why?  Clean Code!  Both lead you towards smaller pure methods.</li>
+        </ul>
+      </section>
+
+    </div>
+  </div>
+
+  <script src="reveal.js-3.6.0/lib/js/head.min.js"></script>
+  <script src="reveal.js-3.6.0/js/reveal.js"></script>
+  <script>
+    Reveal.initialize({
+        slideNumber: 'c/t',
+        dependencies: [
+            // Cross-browser shim that fully implements classList - https://github.com/eligrey/classList.js/
+            { src: 'reveal.js-3.6.0/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+
+            // Syntax highlight for <code> elements
+            { src: 'reveal.js-3.6.0/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+
+            // Zoom in and out with Alt+click
+            { src: 'reveal.js-3.6.0/plugin/zoom-js/zoom.js', async: true },
+
+            // Speaker notes
+            { src: 'reveal.js-3.6.0/plugin/notes/notes.js', async: true }
+        ]
+    });
+  </script>
+</body>
+</html>

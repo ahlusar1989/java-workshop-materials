@@ -1,0 +1,131 @@
+<html>
+<head>
+<title>Functional Java Workshop</title>
+<link rel="stylesheet" href="reveal.js-3.6.0/css/reveal.css">
+<link rel="stylesheet" href="reveal.js-3.6.0/css/theme/moon.css">
+<link rel="stylesheet" href="reveal.js-3.6.0/lib/css/obsidian.css">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+      <section>
+        <h2>Functional Java Workshop</h2>
+        <h3>Function Composition</h3>
+        <h4>Saran Ahluwalia</h4>
+        <p>https://github.com/ahlusar1989/java-workshop-materials</p>
+        <p>https://ahlusar1989.github.io/java-workshop-materials/</p>
+      </section>
+
+      <section>
+        <h2>Function Composition</h2>
+        <h4>Higher Order Functions in Java</h4>
+        <p>All code examples in <code style="font-size: smaller">examples.basics.composition.FunctionCompositionTest.java</code></p>
+      </section>
+      
+      <section>
+        <h4>Higher Order Functions</h4>
+        <ul>
+          <li>Higher order functions means that functions can be used as parameters,
+            return values, or attributes
+          </li>
+          <li>Java doesn't have functions/methods that live outside of objects</li>
+          <li>Functional interfaces and lambdas have added some syntax support</li>
+          <li>This topic can get crazy with weird vocabulary and unusual concepts</li>
+          <li>We're going to cover something relatively simple that will be useful later on</li>
+        </ul>
+      </section>
+
+      <section>
+        <p>BiFunction Functional Interface</p>
+        <pre>
+          <code class="java">
+    // create a basic concatenation function
+    private BiFunction&lt;String, String, String&gt; concat = (a, b) -> a + " " + b;
+
+    @Test
+    public void testConcat() {
+        String phrase = concat.apply("Hello", "Fred");
+        
+        assertThat(phrase).isEqualTo("Hello Fred");
+    }
+          </code>
+        </pre>
+      </section>
+      
+      <section>
+        <p>Function and BiFunction Functional Interfaces</p>
+        <pre>
+          <code class="java">
+    // create a basic concatenation function
+    private BiFunction&lt;String, String, String&gt; concat = (a, b) -> a + " " + b;
+    
+    // create a new function that calls the concatenation function, but
+    // provides the first parameter as a constant
+    private Function&lt;String, String&gt; hello = a -> concat.apply("Hello", a);
+
+    @Test
+    public void testHello() {
+        String phrase = hello.apply("Fred");
+        
+        assertThat(phrase).isEqualTo("Hello Fred");
+    }
+          </code>
+        </pre>
+      </section>
+
+      <section>
+        <p>"composed" Functions are Useful in Stream Pipelines</p>
+        <pre>
+          <code class="java" style="max-height: 450px">
+    // create a basic concatenation function
+    private BiFunction&lt;String, String, String&gt; concat = (a, b) -> a + " " + b;
+    
+    // create a new function that calls the concatenation function, but
+    // provides the first parameter as a constant
+    private Function&lt;String, String&gt; hello = a -> concat.apply("Hello", a);
+
+    @Test
+    public void testHelloInStream() {
+        String answer = Stream.of(ImmutablePerson.of("Fred", "Flintstone"),
+                                  ImmutablePerson.of("Barney", "Rubble"))
+                .map(ImmutablePerson::getFirstName)
+                .map(hello)
+                .collect(Collectors.joining(", "));
+
+        assertThat(answer).isEqualTo("Hello Fred, Hello Barney");
+    }
+          </code>
+        </pre>
+      </section>
+
+      <section>
+        <h1>Time to Code!</h1>
+        <h4>Refactor a Looping Mess</h4>
+      </section>
+
+    </div>
+  </div>
+
+  <script src="reveal.js-3.6.0/lib/js/head.min.js"></script>
+  <script src="reveal.js-3.6.0/js/reveal.js"></script>
+  <script>
+    Reveal.initialize({
+        slideNumber: 'c/t',
+        dependencies: [
+            // Cross-browser shim that fully implements classList - https://github.com/eligrey/classList.js/
+            { src: 'reveal.js-3.6.0/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+
+            // Syntax highlight for <code> elements
+            { src: 'reveal.js-3.6.0/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+
+            // Zoom in and out with Alt+click
+            { src: 'reveal.js-3.6.0/plugin/zoom-js/zoom.js', async: true },
+
+            // Speaker notes
+            { src: 'reveal.js-3.6.0/plugin/notes/notes.js', async: true }
+        ]
+    });
+  </script>
+</body>
+</html>

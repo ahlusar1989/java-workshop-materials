@@ -1,0 +1,374 @@
+<html>
+<head>
+<title>Functional Java Workshop</title>
+<link rel="stylesheet" href="reveal.js-3.6.0/css/reveal.css">
+<link rel="stylesheet" href="reveal.js-3.6.0/css/theme/moon.css">
+<link rel="stylesheet" href="reveal.js-3.6.0/lib/css/obsidian.css">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+      <section>
+        <h2>Functional Java Workshop</h2>
+        <h3>Streams</h3>
+        <h4>Saran Ahluwalia</h4>
+        <p>https://github.com/ahlusar1989/java-workshop-materials</p>
+        <p>https://ahlusar1989.github.io/java-workshop-materials/</p>
+      </section>
+
+      <section>
+        <h1>Streams</h1>
+        <h4>Streams == Lazy Pipelines</h4>
+        <p>All code examples in <code>examples.basics.streams.StreamTest.java</code></p>
+      </section>
+      
+      <section>
+        <h4>Declarative vs. Imperative</h4>
+        <ul>
+          <li>Streams are declarative</li>
+          <li>Streams are to Collections as SQL is to Data</li>
+          <li>Streams can replace some very common patterns in your code</li>
+          <li>Streams require some trust - that they work better than your imperative code</li>
+          <li>In my experience, the best way to learn to work with streams is to swear you will never write
+              another for/do/while loop</li>
+        </ul>
+      </section>
+      
+      <section>
+        <h4>Laziness</h4>
+        <ul>
+          <li>Streams are lazy</li>
+          <li>Streams can be parallel</li>
+          <li>Laziness means that intermediate operations are not executed until a terminal operation is called</li>
+          <li>Typical intermediate operations are map, flatMap and filter</li>
+          <li>Typical terminal operations are reduce, collect, count, min, max</li>
+          <li>There are a HUGE number of different types of collectors.  We will only cover a few.</li> 
+        </ul>
+      </section>
+
+      <section>
+        <p>Streams can be created from a List</p>
+        <pre>
+          <code class="java">
+    private Stream&lt;ImmutablePerson&gt; getTheFlintstones() {
+        List&lt;ImmutablePerson&gt; people = new ArrayList&lt;&gt;();
+        
+        people.add(ImmutablePerson.of("Fred", "Flintstone"));
+        people.add(ImmutablePerson.of("Wilma", "Flintstone"));
+        people.add(ImmutablePerson.of("Pebbles", "Flintstone"));
+
+        return people.stream();
+    }
+          </code>
+        </pre>
+      </section>
+
+      <section>
+        <p>Streams can be created directly with the "of" method</p>
+        <pre>
+          <code class="java">
+    private Stream&lt;ImmutablePerson&gt; getTheRubbles() {
+        return Stream.of(ImmutablePerson.of("Barney", "Rubble"),
+                ImmutablePerson.of("Betty", "Rubble"),
+                ImmutablePerson.of("Bamm Bamm", "Rubble"));
+    }
+          </code>
+        </pre>
+      </section>
+
+      <section>
+        <p>The "collect" method can gather a stream into a List</p>
+        <pre>
+          <code class="java">
+    @Test
+    public void testCollect() {
+        List&lt;ImmutablePerson&gt; flintstones = getTheFlintstones()
+                .collect(Collectors.toList());
+        
+        assertThat(flintstones.size()).isEqualTo(3);
+        assertThat(flintstones.get(1).getFirstName()).isEqualTo("Wilma");
+    }
+          </code>
+        </pre>
+      </section>
+
+      <section>
+        <p>The "filter" method is used to create a new stream containing only
+           items that match the filter</p>
+        <pre>
+          <code class="java">
+    // the "filter" method is used to create a new stream containing only
+    // items that match the filter
+    @Test
+    public void testFilterConciseLambda() {
+        List&lt;ImmutablePerson&gt; flintstones = getTheFlintstones()
+              .filter(p -> p.getFirstName().equals("Fred") || p.getFirstName().equals("Wilma"))
+              .collect(Collectors.toList());
+        
+        assertThat(flintstones.size()).isEqualTo(2);
+        assertThat(flintstones.get(1).getFirstName()).isEqualTo("Wilma");
+    }
+          </code>
+        </pre>
+      </section>
+
+      <section>
+        <p>You can use a method reference in a filter method.</p>
+        <pre>
+          <code class="java">
+    @Test
+    public void testFilterWithMethodReference() {
+        List&lt;ImmutablePerson&gt; flintstones = getTheFlintstones()
+                .filter(this::isFredOrWilma)
+                .collect(Collectors.toList());
+        
+        assertThat(flintstones.size()).isEqualTo(2);
+        assertThat(flintstones.get(1).getFirstName()).isEqualTo("Wilma");
+    }
+    
+    private boolean isFredOrWilma(ImmutablePerson p) {
+        return p.getFirstName().equals("Fred") || p.getFirstName().equals("Wilma");
+    }
+          </code>
+        </pre>
+      </section>
+
+      <section>
+        <p>The "map" method is used to transform a stream from one type to another</p>
+        <pre>
+          <code class="java" style="max-height: 450px">
+    @Test
+    public void getMap() {
+        String directoryListing = getTheFlintstones()
+                .map(this::personAsString)  // Stream&lt;ImmutablePerson&gt; -> Stream&lt;String&gt;
+                .collect(Collectors.joining("\n")); // Returns a String joined with "\n" 
+        
+        String expected = "Flintstone, Fred\n"
+                + "Flintstone, Wilma\n"
+                + "Flintstone, Pebbles";
+        
+        assertThat(directoryListing).isEqualTo(expected);
+    }
+    
+    private String personAsString(ImmutablePerson person) {
+        return person.getLastName() + ", " + person.getFirstName();
+    }
+          </code>
+        </pre>
+      </section>
+
+      <section>
+        <p>The "sorted" method is used to reorder a Stream</p>
+        <pre>
+          <code class="java">
+    // you can supply a lambda for the sort function, or use
+    // the natural order of a comparable
+    @Test
+    public void testSorted() {
+        String directoryListing = getTheFlintstones()
+                .sorted((p1, p2) -> p1.getFirstName().compareTo(p2.getFirstName()))
+                .map(this::personAsString)
+                .collect(Collectors.joining("\n"));
+        
+        String expected = "Flintstone, Fred\n"
+                + "Flintstone, Pebbles\n"
+                + "Flintstone, Wilma";
+        
+        assertThat(directoryListing).isEqualTo(expected);
+    }
+          </code>
+        </pre>
+      </section>
+
+      <section>
+        <p>Stream methods can be chained together to create a pipeline</p>
+        <pre>
+          <code class="java">
+    @Test
+    public void testStreamMethodChaining() {
+        String directoryListing = getTheFlintstones()
+                .filter(this::isFredOrWilma)
+                .sorted((p1, p2) -> p1.getFirstName().compareTo(p2.getFirstName()))
+                .map(this::personAsString)
+                .collect(Collectors.joining("\n"));
+        
+        String expected = "Flintstone, Fred\n"
+                + "Flintstone, Wilma";
+        
+        assertThat(directoryListing).isEqualTo(expected);
+    }
+          </code>
+        </pre>
+      </section>
+
+      <section>
+        <p>The skip method can be used to skip over items in a stream</p>
+        <pre>
+          <code class="java">
+    @Test
+    public void testSkip() {
+        String directoryListing = getTheFlintstones()
+                .skip(1)
+                .filter(this::isFredOrWilma)
+                .sorted((p1, p2) -> p1.getFirstName().compareTo(p2.getFirstName()))
+                .map(this::personAsString)
+                .collect(Collectors.joining("\n"));
+        
+        String expected = "Flintstone, Wilma";
+        
+        assertThat(directoryListing).isEqualTo(expected);
+    }
+          </code>
+        </pre>
+      </section>
+
+      <section>
+        <p>flatMap is used to apply a many to one mapping</p> 
+        <pre>
+          <code class="java" style="max-height: 500px">
+    @Test
+    public void testFlatMap1() {
+        ImmutablePerson fred = ImmutablePerson.of("Fred", "Flintstone");
+        fred = fred.withNickNames("The Fredmeister", "Yabba Dabba Dude");
+        
+        ImmutablePerson barney = ImmutablePerson.of("Barney",  "Rubble");
+        barney = barney.withNickNames("The Barnster", "Little Buddy");
+
+        String expectedAllNickNames = "The Fredmeister,Yabba Dabba Dude,"
+                + "The Barnster,Little Buddy";
+        
+        // (not so good) map each ImmutablePerson to a Stream&lt;String&gt; of nicknames,
+        // then use flatMap for flatten
+        String allNickNames = Stream.of(fred, barney)  // Stream&lt;ImmutablePerson&gt;
+                .map(ImmutablePerson::nickNames)  // Stream&lt;Stream&lt;String&gt;&gt;
+                .flatMap(Function.identity()) // Stream&lt;String&gt;
+                .collect(Collectors.joining(","));
+        
+        assertThat(allNickNames).isEqualTo(expectedAllNickNames);
+    }
+          </code>
+        </pre>
+      </section>
+
+      <section>
+        <p>This is a better use of flatMap</p> 
+        <pre>
+          <code class="java" style="max-height: 500px">
+    @Test
+    public void testFlatMap2() {
+        ImmutablePerson fred = ImmutablePerson.of("Fred", "Flintstone");
+        fred = fred.withNickNames("The Fredmeister", "Yabba Dabba Dude");
+        
+        ImmutablePerson barney = ImmutablePerson.of("Barney",  "Rubble");
+        barney = barney.withNickNames("The Barnster", "Little Buddy");
+
+        String expectedAllNickNames = "The Fredmeister,Yabba Dabba Dude,"
+                + "The Barnster,Little Buddy";
+        
+        // (better) use flatMap instead of map with the mapping function
+        String allNickNames = Stream.of(fred, barney)  // Stream&lt;ImmutablePerson&gt;
+                .flatMap(ImmutablePerson::nickNames)  // Stream&lt;String&gt;
+                .collect(Collectors.joining(","));
+        
+        assertThat(allNickNames).isEqualTo(expectedAllNickNames);
+    }
+          </code>
+        </pre>
+      </section>
+
+      <section>
+        <p>Streams can be concatenated with the concat method</p>
+        <pre>
+          <code class="java">
+    @Test
+    public void testConcatenationWithConcat() {
+        // concat is OK to use when concatenating two streams, but can cause problems
+        // with multiple streams and recursion.  There is a warning in the JavaDocs
+        // about being careful with concat.  If you have multiple streams to concatenate,
+        // then it is better to use the flatMap technique below.
+        List&lt;ImmutablePerson&gt; allPeople = Stream.concat(getTheFlintstones(), getTheRubbles())
+                .collect(Collectors.toList());
+
+        assertThat(allPeople.size()).isEqualTo(6);
+        assertThat(allPeople.get(1).getFirstName()).isEqualTo("Wilma");
+        assertThat(allPeople.get(4).getFirstName()).isEqualTo("Betty");
+    }
+          </code>
+        </pre>
+      </section>
+
+      <section>
+        <p>Streams can also be concatenated with flatMap</p>
+        <pre>
+          <code class="java">
+    @Test
+    public void testConcatenationWithFlatMap() {
+        List&lt;ImmutablePerson&gt; allPeople = Stream.of(getTheFlintstones(), getTheRubbles())
+                .flatMap(Function.identity())
+                .collect(Collectors.toList());
+
+        assertThat(allPeople.size()).isEqualTo(6);
+        assertThat(allPeople.get(1).getFirstName()).isEqualTo("Wilma");
+        assertThat(allPeople.get(4).getFirstName()).isEqualTo("Betty");
+    }
+          </code>
+        </pre>
+      </section>
+
+      <section>
+        <p>The Stream.forEach method is for side effects.  We don't want side effects,
+            so avoid doing this</p>
+        <pre>
+          <code class="java" style="max-height: 450px">
+    @Test
+    public void testForEach() {
+        StringBuilder sb = new StringBuilder();
+        
+        getTheFlintstones().forEach(p -> {
+            sb.append(personAsString(p));
+            sb.append("\n"); // no good way to tell if we are at the end of the stream
+        });
+
+        String expected = "Flintstone, Fred\n"
+                + "Flintstone, Wilma\n"
+                + "Flintstone, Pebbles\n"; // note the extra \n at the end
+        
+        assertThat(sb.toString()).isEqualTo(expected);
+    }
+          </code>
+        </pre>
+      </section>
+
+      <section>
+        <h4>Streams Summary</h4>
+        <blockquote>
+          Map/Filter/Collect can replace virtually all loop structures in your code and drive you towards cleaner code.
+        </blockquote>
+      </section>
+
+    </div>
+  </div>
+
+  <script src="reveal.js-3.6.0/lib/js/head.min.js"></script>
+  <script src="reveal.js-3.6.0/js/reveal.js"></script>
+  <script>
+    Reveal.initialize({
+        slideNumber: 'c/t',
+        dependencies: [
+            // Cross-browser shim that fully implements classList - https://github.com/eligrey/classList.js/
+            { src: 'reveal.js-3.6.0/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+
+            // Syntax highlight for <code> elements
+            { src: 'reveal.js-3.6.0/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+
+            // Zoom in and out with Alt+click
+            { src: 'reveal.js-3.6.0/plugin/zoom-js/zoom.js', async: true },
+
+            // Speaker notes
+            { src: 'reveal.js-3.6.0/plugin/notes/notes.js', async: true }
+        ]
+    });
+  </script>
+</body>
+</html>
