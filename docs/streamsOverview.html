@@ -51,12 +51,12 @@
         <p>Streams can be created from a List</p>
         <pre>
           <code class="java">
-    private Stream&lt;ImmutablePerson&gt; getTheFlintstones() {
-        List&lt;ImmutablePerson&gt; people = new ArrayList&lt;&gt;();
+    private Stream&lt;ImmutableUser&gt; getTheFlintstones() {
+        List&lt;ImmutableUser&gt; people = new ArrayList&lt;&gt;();
         
-        people.add(ImmutablePerson.of("Fred", "Flintstone"));
-        people.add(ImmutablePerson.of("Wilma", "Flintstone"));
-        people.add(ImmutablePerson.of("Pebbles", "Flintstone"));
+        people.add(ImmutableUser.of("Fred", "Flintstone"));
+        people.add(ImmutableUser.of("Wilma", "Flintstone"));
+        people.add(ImmutableUser.of("Pebbles", "Flintstone"));
 
         return people.stream();
     }
@@ -68,10 +68,10 @@
         <p>Streams can be created directly with the "of" method</p>
         <pre>
           <code class="java">
-    private Stream&lt;ImmutablePerson&gt; getTheRubbles() {
-        return Stream.of(ImmutablePerson.of("Barney", "Rubble"),
-                ImmutablePerson.of("Betty", "Rubble"),
-                ImmutablePerson.of("Bamm Bamm", "Rubble"));
+    private Stream&lt;ImmutableUser&gt; getTheRubbles() {
+        return Stream.of(ImmutableUser.of("Barney", "Rubble"),
+                ImmutableUser.of("Betty", "Rubble"),
+                ImmutableUser.of("Bamm Bamm", "Rubble"));
     }
           </code>
         </pre>
@@ -83,7 +83,7 @@
           <code class="java">
     @Test
     public void testCollect() {
-        List&lt;ImmutablePerson&gt; flintstones = getTheFlintstones()
+        List&lt;ImmutableUser&gt; flintstones = getTheFlintstones()
                 .collect(Collectors.toList());
         
         assertThat(flintstones.size()).isEqualTo(3);
@@ -102,7 +102,7 @@
     // items that match the filter
     @Test
     public void testFilterConciseLambda() {
-        List&lt;ImmutablePerson&gt; flintstones = getTheFlintstones()
+        List&lt;ImmutableUser&gt; flintstones = getTheFlintstones()
               .filter(p -> p.getFirstName().equals("Fred") || p.getFirstName().equals("Wilma"))
               .collect(Collectors.toList());
         
@@ -119,7 +119,7 @@
           <code class="java">
     @Test
     public void testFilterWithMethodReference() {
-        List&lt;ImmutablePerson&gt; flintstones = getTheFlintstones()
+        List&lt;ImmutableUser&gt; flintstones = getTheFlintstones()
                 .filter(this::isFredOrWilma)
                 .collect(Collectors.toList());
         
@@ -127,7 +127,7 @@
         assertThat(flintstones.get(1).getFirstName()).isEqualTo("Wilma");
     }
     
-    private boolean isFredOrWilma(ImmutablePerson p) {
+    private boolean isFredOrWilma(ImmutableUser p) {
         return p.getFirstName().equals("Fred") || p.getFirstName().equals("Wilma");
     }
           </code>
@@ -141,7 +141,7 @@
     @Test
     public void getMap() {
         String directoryListing = getTheFlintstones()
-                .map(this::personAsString)  // Stream&lt;ImmutablePerson&gt; -> Stream&lt;String&gt;
+                .map(this::personAsString)  // Stream&lt;ImmutableUser&gt; -> Stream&lt;String&gt;
                 .collect(Collectors.joining("\n")); // Returns a String joined with "\n" 
         
         String expected = "Flintstone, Fred\n"
@@ -151,7 +151,7 @@
         assertThat(directoryListing).isEqualTo(expected);
     }
     
-    private String personAsString(ImmutablePerson person) {
+    private String personAsString(ImmutableUser person) {
         return person.getLastName() + ", " + person.getFirstName();
     }
           </code>
@@ -229,19 +229,19 @@
           <code class="java" style="max-height: 500px">
     @Test
     public void testFlatMap1() {
-        ImmutablePerson fred = ImmutablePerson.of("Fred", "Flintstone");
+        ImmutableUser fred = ImmutableUser.of("Fred", "Flintstone");
         fred = fred.withNickNames("The Fredmeister", "Yabba Dabba Dude");
         
-        ImmutablePerson barney = ImmutablePerson.of("Barney",  "Rubble");
+        ImmutableUser barney = ImmutableUser.of("Barney",  "Rubble");
         barney = barney.withNickNames("The Barnster", "Little Buddy");
 
         String expectedAllNickNames = "The Fredmeister,Yabba Dabba Dude,"
                 + "The Barnster,Little Buddy";
         
-        // (not so good) map each ImmutablePerson to a Stream&lt;String&gt; of nicknames,
+        // (not so good) map each ImmutableUser to a Stream&lt;String&gt; of nicknames,
         // then use flatMap for flatten
-        String allNickNames = Stream.of(fred, barney)  // Stream&lt;ImmutablePerson&gt;
-                .map(ImmutablePerson::nickNames)  // Stream&lt;Stream&lt;String&gt;&gt;
+        String allNickNames = Stream.of(fred, barney)  // Stream&lt;ImmutableUser&gt;
+                .map(ImmutableUser::nickNames)  // Stream&lt;Stream&lt;String&gt;&gt;
                 .flatMap(Function.identity()) // Stream&lt;String&gt;
                 .collect(Collectors.joining(","));
         
@@ -257,18 +257,18 @@
           <code class="java" style="max-height: 500px">
     @Test
     public void testFlatMap2() {
-        ImmutablePerson fred = ImmutablePerson.of("Fred", "Flintstone");
+        ImmutableUser fred = ImmutableUser.of("Fred", "Flintstone");
         fred = fred.withNickNames("The Fredmeister", "Yabba Dabba Dude");
         
-        ImmutablePerson barney = ImmutablePerson.of("Barney",  "Rubble");
+        ImmutableUser barney = ImmutableUser.of("Barney",  "Rubble");
         barney = barney.withNickNames("The Barnster", "Little Buddy");
 
         String expectedAllNickNames = "The Fredmeister,Yabba Dabba Dude,"
                 + "The Barnster,Little Buddy";
         
         // (better) use flatMap instead of map with the mapping function
-        String allNickNames = Stream.of(fred, barney)  // Stream&lt;ImmutablePerson&gt;
-                .flatMap(ImmutablePerson::nickNames)  // Stream&lt;String&gt;
+        String allNickNames = Stream.of(fred, barney)  // Stream&lt;ImmutableUser&gt;
+                .flatMap(ImmutableUser::nickNames)  // Stream&lt;String&gt;
                 .collect(Collectors.joining(","));
         
         assertThat(allNickNames).isEqualTo(expectedAllNickNames);
@@ -287,7 +287,7 @@
         // with multiple streams and recursion.  There is a warning in the JavaDocs
         // about being careful with concat.  If you have multiple streams to concatenate,
         // then it is better to use the flatMap technique below.
-        List&lt;ImmutablePerson&gt; allPeople = Stream.concat(getTheFlintstones(), getTheRubbles())
+        List&lt;ImmutableUser&gt; allPeople = Stream.concat(getTheFlintstones(), getTheRubbles())
                 .collect(Collectors.toList());
 
         assertThat(allPeople.size()).isEqualTo(6);
@@ -304,7 +304,7 @@
           <code class="java">
     @Test
     public void testConcatenationWithFlatMap() {
-        List&lt;ImmutablePerson&gt; allPeople = Stream.of(getTheFlintstones(), getTheRubbles())
+        List&lt;ImmutableUser&gt; allPeople = Stream.of(getTheFlintstones(), getTheRubbles())
                 .flatMap(Function.identity())
                 .collect(Collectors.toList());
 

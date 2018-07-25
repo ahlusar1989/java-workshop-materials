@@ -175,11 +175,11 @@ SimpleImmutableObjectWithBuilder myObject = SimpleImmutableObjectWithBuilder.of(
         Fluent Builder Pattern - How to Handle Optionals
         <pre>
           <code class="java" style="max-height: 550px">
-public class ImmutablePerson {
+public class ImmutableUser {
     private String middleName;
     ...
     
-    private ImmutablePerson(Builder builder) {
+    private ImmutableUser(Builder builder) {
         ....
         middleName = builder.middleName;  // no null check
     }
@@ -208,7 +208,7 @@ public class ImmutablePerson {
         Fluent Builder Pattern - How to Handle Lists
         <pre>
           <code class="java" style="max-height: 550px">
-public class ImmutablePerson {
+public class ImmutableUser {
     private List&lt;String&gt; nickNames;
     ...
     
@@ -246,19 +246,19 @@ public class ImmutablePerson {
         How to Make "Mutable" Immutables
         <pre>
           <code class="java" style="max-height: 550px">
-public class ImmutablePerson {
+public class ImmutableUser {
     ...
     
     // copy constructor - for the with*** methods
-    private ImmutablePerson(ImmutablePerson other) {
+    private ImmutableUser(ImmutableUser other) {
         firstName = other.firstName;
         middleName = other.middleName;
         lastName = other.lastName;
         nickNames = new ArrayList&lt;&gt;(other.nickNames);
     }
     
-    public ImmutablePerson withMiddleName(String middleName) {
-        ImmutablePerson copy = new ImmutablePerson(this);
+    public ImmutableUser withMiddleName(String middleName) {
+        ImmutableUser copy = new ImmutableUser(this);
         copy.middleName = middleName;
         return copy;
     }
@@ -271,7 +271,7 @@ public class ImmutablePerson {
         Using with* Methods
         <pre>
           <code class="java">
-  ImmutablePerson person = new ImmutablePerson.Builder()
+  ImmutableUser person = new ImmutableUser.Builder()
       .withFirstName("Fred")
       .withLastName("Flintstone")
       .build();
@@ -301,7 +301,7 @@ public class ImmutablePerson {
           <code class="java" style="max-height: 500px">
     @Test
     public void testImpureFunction() {
-        List&lt;ImmutablePerson&gt; allPeople = new ArrayList&lt;&gt;();
+        List&lt;ImmutableUser&gt; allPeople = new ArrayList&lt;&gt;();
         addTheFlintstones(allPeople);
         addTheRubbles(allPeople);
         
@@ -310,14 +310,14 @@ public class ImmutablePerson {
         assertThat(allPeople.get(3).getFirstName()).isEqualTo("Betty");
     }
 
-    private void addTheFlintstones(List&lt;ImmutablePerson&gt; people) {
-        people.add(ImmutablePerson.of("Fred", "Flintstone"));
-        people.add(ImmutablePerson.of("Wilma", "Flintstone"));
+    private void addTheFlintstones(List&lt;ImmutableUser&gt; people) {
+        people.add(ImmutableUser.of("Fred", "Flintstone"));
+        people.add(ImmutableUser.of("Wilma", "Flintstone"));
     }
 
-    private void addTheRubbles(List&lt;ImmutablePerson&gt; people) {
-        people.add(ImmutablePerson.of("Barney", "Rubble"));
-        people.add(ImmutablePerson.of("Betty", "Rubble"));
+    private void addTheRubbles(List&lt;ImmutableUser&gt; people) {
+        people.add(ImmutableUser.of("Barney", "Rubble"));
+        people.add(ImmutableUser.of("Betty", "Rubble"));
     }
           </code>
         </pre>
@@ -329,24 +329,24 @@ public class ImmutablePerson {
           <code class="java" style="max-height: 550px">
     @Test
     public void testPureFunction() {
-        List&lt;ImmutablePerson&gt; allPeople = new ArrayList&lt;&gt;();
+        List&lt;ImmutableUser&gt; allPeople = new ArrayList&lt;&gt;();
         allPeople.addAll(getTheFlintstones());
         allPeople.addAll(getTheRubbles());
         
         assertThat(allPeople.size()).isEqualTo(4);
     }
     
-    private List&lt;ImmutablePerson&gt; getTheFlintstones() {
-        List&lt;ImmutablePerson&gt; flintstones = new ArrayList&lt;&gt;();
-        flintstones.add(ImmutablePerson.of("Fred", "Flintstone"));
-        flintstones.add(ImmutablePerson.of("Wilma", "Flintstone"));
+    private List&lt;ImmutableUser&gt; getTheFlintstones() {
+        List&lt;ImmutableUser&gt; flintstones = new ArrayList&lt;&gt;();
+        flintstones.add(ImmutableUser.of("Fred", "Flintstone"));
+        flintstones.add(ImmutableUser.of("Wilma", "Flintstone"));
         return flintstones;
     }
 
-    private List&lt;ImmutablePerson&gt; getTheRubbles() {
-        List&lt;ImmutablePerson&gt; rubbles = new ArrayList&lt;&gt;();
-        rubbles.add(ImmutablePerson.of("Barney", "Rubble"));
-        rubbles.add(ImmutablePerson.of("Betty", "Rubble"));
+    private List&lt;ImmutableUser&gt; getTheRubbles() {
+        List&lt;ImmutableUser&gt; rubbles = new ArrayList&lt;&gt;();
+        rubbles.add(ImmutableUser.of("Barney", "Rubble"));
+        rubbles.add(ImmutableUser.of("Betty", "Rubble"));
         return rubbles;
     }
           </code>
@@ -359,7 +359,7 @@ public class ImmutablePerson {
           <code class="java" style="max-height: 500px">
     @Test
     public void testPureFunction() {
-        List&lt;ImmutablePerson&gt; allPeople = Stream.of(getTheFlintstones(), getTheRubbles())
+        List&lt;ImmutableUser&gt; allPeople = Stream.of(getTheFlintstones(), getTheRubbles())
                 .flatMap(Function.identity())
                 .collect(Collectors.toList());
         
@@ -368,14 +368,14 @@ public class ImmutablePerson {
         assertThat(allPeople.get(3).getFirstName()).isEqualTo("Betty");
     }
     
-    private Stream&lt;ImmutablePerson&gt; getTheFlintstones() {
-        return Stream.of(ImmutablePerson.of("Fred", "Flintstone"),
-                ImmutablePerson.of("Wilma", "Flintstone"));
+    private Stream&lt;ImmutableUser&gt; getTheFlintstones() {
+        return Stream.of(ImmutableUser.of("Fred", "Flintstone"),
+                ImmutableUser.of("Wilma", "Flintstone"));
     }
 
-    private Stream&lt;ImmutablePerson&gt; getTheRubbles() {
-        return Stream.of(ImmutablePerson.of("Barney", "Rubble"),
-                ImmutablePerson.of("Betty", "Rubble"));
+    private Stream&lt;ImmutableUser&gt; getTheRubbles() {
+        return Stream.of(ImmutableUser.of("Barney", "Rubble"),
+                ImmutableUser.of("Betty", "Rubble"));
     }
           </code>
         </pre>
