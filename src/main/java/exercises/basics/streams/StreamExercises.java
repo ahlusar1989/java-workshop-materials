@@ -18,7 +18,7 @@ public class StreamExercises {
     public int calculateTotalOrdered(List<Order> orders, String productName) {
         // TODO - return the total quantity of products ordered that match the input name
         //
-        // hint: us the mapToInt(ToIntFunction) function to transform an object stream to an IntStream,
+        // hint: use the mapToInt(ToIntFunction) function to transform an object stream to an IntStream,
         // then use the sum function.  For example: see the mapToIntAndSumExample function below
         
         return 0;
