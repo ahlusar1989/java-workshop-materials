@@ -51,9 +51,9 @@ You can start this exercise with either step 1 or step 2.  We've supplied step 1
 
 If you get stuck along the way, the solutions for each step are in `src/main/java/solutions/refactoring`.
 
-1. Traditional Refactoring (start with `src/main/java/exercises/refactoring/AwfulScriptGenerator`)
+1. Traditional Refactoring (start with `src/main/java/exercises/refactoring/ImperativeScriptGenerator`)
 
-2. Make Pure Functions (start with `src/main/java/exercises/refactoring/AwfulScriptGeneratorRefactored`)
+2. Make Pure Functions (start with `src/main/java/exercises/refactoring/ImperativeScriptGeneratorRefactored`)
 
    - Change the `void addInsertStatementForCell(List, String, Cell)` method to `Optional<String> getInsertStatementForCell(String, Cell)`
    - Change the `void addInsertStatementsForRow(List, Row, String)` method to `List getInsertStatementsForRow(Row, String)` - For now use `Optional.ifPresent` to add the statement only if it exists
