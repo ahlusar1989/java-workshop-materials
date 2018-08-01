@@ -40,9 +40,10 @@ You will need to configure some environment variables for the tools to work prop
 1. Install IntelliJ Community Edition from [https://www.jetbrains.com/idea/download](https://www.jetbrains.com/idea/download)
 2. Clone the repository from [https://github.com/ahlusar1989/java-workshop-materials.git](https://github.com/ahlusar1989/java-workshop-materials.git), or download the zip from [https://github.com/ahlusar1989/java-workshop-materials/archive/master.zip](https://github.com/ahlusar1989/java-workshop-materials/archive/master.zip)
 3. Open IntelliJ, import Maven project from the cloned repo (File->New->Project From Existing Sources...)
-4. Run tests with ctrl-shift-F10
+4. Based on your configuration you may need to mark the directory as test (right click directory -> Mark Directory as --> Test Sources Root)
+4. Run tests with ctrl-shift-R
 
-## Setup for Visual Studio Code
+## Setup for Visual Studio Code (based on my limited knowledge - feedback is welcome)
 1. Install VS code from [https://code.visualstudio.com/](https://code.visualstudio.com/)
 2. Clone the repository from [https://github.com/ahlusar1989/java-workshop-materials.git](https://github.com/ahlusar1989/java-workshop-materials.git), or download the zip from [https://github.com/ahlusar1989/java-workshop-materials/archive/master.zip](https://github.com/ahlusar1989/java-workshop-materials/archive/master.zip)
 3. Open VS code in the cloned code repo:
