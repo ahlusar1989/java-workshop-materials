@@ -8,7 +8,7 @@ import java.util.List;
 import org.junit.Ignore;
 import org.junit.Test;
 
-@Ignore
+@Ignore("Ignoring Test that should be uncommented for streams exercise")
 public class StreamTest {
 
     @Test

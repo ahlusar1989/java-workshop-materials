@@ -7,7 +7,7 @@ import java.util.List;
 
 import org.junit.Ignore;
 import org.junit.Test;
-@Ignore
+@Ignore("Ignore StreamTest in solutions test source")
 public class StreamTest {
 
     @Test
