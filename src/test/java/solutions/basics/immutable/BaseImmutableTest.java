@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 
 import org.junit.Ignore;
 import org.junit.Test;
-@Ignore("Ignore BaseImmutableTest in Solutions directory")
+@Ignore("Ignore BaseImmutableTest in solutions test source")
 public class BaseImmutableTest {
 
     @Test
